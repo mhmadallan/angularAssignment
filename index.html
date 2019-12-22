@@ -1,0 +1,121 @@
+<html ng-app='weatherApp'>
+<head> 
+    <title>People</title>
+    <style>
+        td {
+            width: 40px;
+            height: 40px;
+            border: 1px solid black;
+        }
+        table {
+            border: 1px solid black;
+            border-spacing: 0;
+        }
+    </style>
+    <script type = 'module'> 
+      import "https://ajax.googleapis.com/ajax/libs/angularjs/1.7.8/angular.min.js"
+      import "https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.js"
+   
+    let arr;
+    const module = angular.module("weatherApp",[]);
+    module.config(['$qProvider', function($qProvider) {
+     $qProvider.errorOnUnhandledRejections(false);
+ }]);
+    module.controller("WeatherController", function($scope,$http){
+        
+
+  
+  $http.get("http://localhost:8080/data").then(function(response){
+    arr = response.data;  
+ 
+   $scope.items = arr;
+ 
+ $scope.search = function (){
+     var d1 = $('#date1').val();
+      var d2 = $('#date2').val();
+      var list = [];
+      for(var i in arr)
+      {
+          if(arr[i].time >= d1 && arr[i].time <= d2)
+          {
+              list.push(arr[i]);
+          }
+      } //ng-show="item.place == city"
+      $scope.items = list;
+     /* console.log("here" + list);
+      console.log("eeeeee" + d1);
+      console.log(arr[0].time < d1);*/
+ }
+ $scope.btn1 = function (){
+     var t1 = $('#btn1').text();
+      var list = [];
+      for(var i in arr)
+      {
+          if(arr[i].place == t1)
+          {
+              list.push(arr[i]);
+          }
+      } //ng-show="item.place == city"
+      $scope.items = list;
+ }
+ $scope.btn2 = function (){
+     var t1 = $('#btn2').text();
+      var list = [];
+      for(var i in arr)
+      {
+          if(arr[i].place == t1)
+          {
+              list.push(arr[i]);
+          }
+      } 
+      $scope.items = list;
+ }
+ $scope.btn3 = function (){
+     var t1 = $('#btn3').text();
+      var list = [];
+      for(var i in arr)
+      {
+          if(arr[i].place == t1)
+          {
+              list.push(arr[i]);
+          }
+      } 
+      $scope.items = list;
+ }
+    })
+    
+})
+   
+    </script>
+  
+
+    
+</head>
+<body ng-controller='WeatherController'>
+
+    <div id='base'>
+
+        <h1>Weather Data</h1>
+        <button id = 'btn1' ng-click = "btn1()">Horsens</button>
+        <button id = 'btn2' ng-click = "btn2()">Aarhus</button>
+        <button id = 'btn3' ng-click = "btn3()">Copenhagen</button>
+        <input  id="date1" ng-model="dateFrom" class="form-control" type="date" required></input>
+        <input  id="date2" ng-model="dateTo" class="form-control" type="date" required></input>
+        <button id = 'btn4' ng-click = "search()">click</button>
+
+        <table id='weaherData'>
+            <thead><tr><td>city</td><td>type</td><td>value</td><td>unit</td><td>time</td></tr></thead>
+            <tbody id='weather_data'>
+                <tr ng-repeat="item in items" >
+                    <td>{{item.place}}</td>
+                    <td>{{item.type}}</td>
+                    <td>{{item.value}}</td>
+                    <td>{{item.unit}}</td>
+                    <td>{{item.time}}</td>
+                    
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</body>
+</html>
